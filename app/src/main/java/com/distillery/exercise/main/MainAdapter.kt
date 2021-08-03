@@ -8,7 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.distillery.exercise.R
 import com.distillery.exercise.data.model.News
 
-class MainAdapter: RecyclerView.Adapter<MainViewHolder>() {
+class MainAdapter (private val listener: NewsItemListener): RecyclerView.Adapter<MainViewHolder>() {
+
+    interface NewsItemListener {
+        fun onClickedNews(news: News)
+    }
 
     private val items = ArrayList<News>()
 
@@ -20,7 +24,7 @@ class MainAdapter: RecyclerView.Adapter<MainViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
-        return MainViewHolder(view)
+        return MainViewHolder(view, listener)
     }
 
     override fun getItemCount(): Int = items.size
@@ -29,14 +33,25 @@ class MainAdapter: RecyclerView.Adapter<MainViewHolder>() {
         holder.bind(items[position])
 }
 
-class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class MainViewHolder(view: View, private val listener: MainAdapter.NewsItemListener) :
+    RecyclerView.ViewHolder(view), View.OnClickListener  {
+
     private lateinit var itemNews: News
     private val textViewTitle: TextView = view.findViewById(R.id.tv_title)
     private val textViewSource: TextView = view.findViewById(R.id.tv_source)
-    
+
+    init {
+        view.rootView.setOnClickListener(this)
+    }
+
+
     fun bind(item: News) {
         this.itemNews = item
         textViewTitle.text = item.title
         textViewSource.text = item.source.name
+    }
+
+    override fun onClick(v: View?) {
+        listener.onClickedNews(itemNews)
     }
 }

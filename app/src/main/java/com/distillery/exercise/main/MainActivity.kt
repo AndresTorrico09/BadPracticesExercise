@@ -1,5 +1,6 @@
 package com.distillery.exercise.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -8,12 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.distillery.exercise.R
 import com.distillery.exercise.data.model.News
+import com.distillery.exercise.detail.DetailActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainAdapter.NewsItemListener {
     lateinit var mainViewModel: MainViewModel
-    val adapter = MainAdapter()
+    val adapter = MainAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +39,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNews(news: ArrayList<News>) {
         adapter.setItems(news)
+    }
+
+    override fun onClickedNews(news: News) {
+        val intent= Intent(this, DetailActivity::class.java)
+        intent.putExtra("newsSelected", news)
+        startActivity(intent)
     }
 }
