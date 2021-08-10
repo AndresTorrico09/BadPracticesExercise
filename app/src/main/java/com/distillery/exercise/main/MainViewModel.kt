@@ -2,6 +2,7 @@ package com.distillery.exercise.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.distillery.exercise.data.DependencyProvider
 import com.distillery.exercise.data.NewsAPI
 import com.distillery.exercise.data.model.News
